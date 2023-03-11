@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 const Search = props => {
-  const { data, handleFetch } = useOutletContext();
+  const { data, handleFetch, saveFavs } = useOutletContext();
   const [title, setTitle] = useState('');
 
-  console.log('wut', handleFetch);
   return (
     <div className="container">
       <h1>Search page</h1>
-      <img src={data.hdurl} />
       {data.title}
+      <img src={data.hdurl} />
       {data.date}
       {data.explanation}
       <input 
@@ -18,8 +17,9 @@ const Search = props => {
         type="date" 
         name="date" 
         id="date" 
-        onChange={(e) => handleFetch(e)}
+        onChange={(e) => handleFetch(e.target.value)}
       />
+      <button className="btn" onClick={() => saveFavs()}>Save</button>
     </div>
   );
 };
