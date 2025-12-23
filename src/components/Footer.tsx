@@ -1,16 +1,21 @@
+import Bluesky from "./Bluesky";
+import Twitter from "./Twitter";
+import Linkedin from "./Linkedin";
+import Github from "./Github";
+
 const Footer = () => {
   return (
     <div className="container">
       <footer>
         <p>
           <span>&copy;2025</span>
-          <a href="">April Copley</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://aprilcopley.netlify.app">April Copley</a>
         </p>
         <div className="social__links">
-          <a href="">Bluesky</a>
-          <a href="">Twitter</a>
-          <a href="">Linked In</a>
-          <a href="">GitHub</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://bsky.app/profile/acopperlily.bsky.social"><Bluesky /></a>
+          <a target="_blank" rel="noopener noreferrer" href="https://x.com/acopperlily"><Twitter /></a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/april-copley"><Linkedin/></a>
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/acopperlily"><Github/></a>
         </div>
       </footer>
     </div>
