@@ -13,10 +13,18 @@ interface ImageProps {
   explanation: string;
   media_type: string;
   copyright?: string;
+  basic_html?: string;
+  basic_html_url?: string;
 }
 
+const now = new Date();
+// const TODAY = now.toJSON().slice(0, 10);
+const TODAY = '261030'
+// const TODAY = '2026-10-30'
+
+
 const KEY = import.meta.env.VITE_API_KEY;
-const DOMAIN = 'https://api.nasa.gov/planetary/apod?api_key=';
+const DOMAIN = `https://science.nasa.gov/wp-json/wp/v2/apod-basic/${TODAY}?api_key=`;
 
 const Home = () => {
   const [data, setData] = useState<ImageProps>({ 
@@ -42,7 +50,14 @@ const Home = () => {
 
         const data = await res.json();
         console.log(data);
-        setData(data);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.explanation, 'text/html');
+        console.log(doc.body.textContent);
+        console.log('doc:', doc);
+        setData((prevData) => ({
+          ...data,
+          explanation: doc.body.textContent
+        }));
       } catch (err) {
         console.error('Error', err);
       }
@@ -60,7 +75,11 @@ const Home = () => {
       {data && <h2>{data.title}</h2>}
       {data && <img src={data.hdurl} />}
       {data && <p>{data.explanation}</p>}
+      {data && <p>{data.basic_html}</p>}
+      {data && <p>{data.basic_html_url}</p>}
+      {/* {data && <p>{text}</p>} */}
       <Link to='search'>Search</Link>
+      <img src="https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/meteor2017_Taylor_1200.jpg" />
     </div>
   );
 };
