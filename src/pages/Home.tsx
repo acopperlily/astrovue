@@ -18,8 +18,13 @@ interface ImageProps {
 }
 
 const now = new Date();
-// const TODAY = now.toJSON().slice(0, 10);
-const TODAY = '261030'
+const test = now.toJSON().slice(0, 10);
+console.log(test)
+console.log('now:', now);
+const year = now.getFullYear();
+const month = now.getMonth();
+const day = now.getDate();
+const TODAY = `${year.toString().slice(2)}${month}${day}`;
 // const TODAY = '2026-10-30'
 
 
@@ -47,7 +52,8 @@ const Home = () => {
         if (!res.ok) {
           console.error('oof');
         }
-
+        const headers = res.headers.get('Content-Type');
+        console.log('headers:', headers);
         const data = await res.json();
         console.log(data);
         const parser = new DOMParser();
@@ -75,11 +81,9 @@ const Home = () => {
       {data && <h2>{data.title}</h2>}
       {data && <img src={data.hdurl} />}
       {data && <p>{data.explanation}</p>}
-      {data && <p>{data.basic_html}</p>}
-      {data && <p>{data.basic_html_url}</p>}
-      {/* {data && <p>{text}</p>} */}
+
       <Link to='search'>Search</Link>
-      <img src="https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/meteor2017_Taylor_1200.jpg" />
+
     </div>
   );
 };
