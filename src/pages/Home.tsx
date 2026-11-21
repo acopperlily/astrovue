@@ -77,8 +77,8 @@ const Home = () => {
 
   useEffect(() => {
     async function getInfo() {
-      const testDate = '240417'
-      const apiURL = `/.netlify/functions/getInfo?date=${testDate}`;
+      // const testDate = '240417'
+      const apiURL = `/.netlify/functions/getInfo?date=${TODAY}`;
       try {
         const res = await fetch(apiURL);
         console.log('res:', res);
