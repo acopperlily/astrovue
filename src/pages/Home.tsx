@@ -19,12 +19,12 @@ interface ImageProps {
 
 const now = new Date();
 const test = now.toJSON().slice(0, 10);
-console.log(test)
+console.log('test:', test)
 console.log('now:', now);
-const year = now.getFullYear();
-const month = now.getMonth();
-const day = now.getDate();
-const TODAY = `${year.toString().slice(2)}${month}${day}`;
+
+const [year, month, day] = test.split('-');
+const TODAY = `${year.slice(2)}${month}${+day-1}`;
+console.log('today:', TODAY);
 // const TODAY = '2026-10-30'
 
 
@@ -60,7 +60,7 @@ const Home = () => {
         const doc = parser.parseFromString(data.explanation, 'text/html');
         console.log(doc.body.textContent);
         console.log('doc:', doc);
-        setData((prevData) => ({
+        setData(() => ({
           ...data,
           explanation: doc.body.textContent
         }));
@@ -73,6 +73,35 @@ const Home = () => {
     return () => {
       controller.abort;
     }
+  }, []);
+
+  useEffect(() => {
+    async function getInfo() {
+      const testDate = '240417'
+      const apiURL = `/.netlify/functions/getInfo?date=${testDate}`;
+      try {
+        const res = await fetch(apiURL);
+        console.log('res:', res);
+        if (!res.ok) {
+          console.error('Network response was ass.');
+        }
+        const info = await res.json();
+
+        console.log('func:', info);
+
+        // const newTitle = info.title;
+      
+        // let imageURL = data;
+        // setData((data) => ({
+        //   ...data,
+        //   title: newTitle
+        // }));
+      } catch (error) {
+        console.error(error);
+      }
+      // return
+    }
+    getInfo();
   }, []);
 
   return (

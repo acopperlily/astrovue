@@ -4,12 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "devv": "vite",
+    "dev": "netlify dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@netlify/functions": "^6.1.1",
+    "@netlify/vite-plugin": "^3.0.1",
     "nanoid": "^6.0.2",
     "normalize.css": "^8.0.1",
     "react": "^19.3.1",
