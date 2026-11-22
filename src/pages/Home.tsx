@@ -17,15 +17,20 @@ interface ImageProps {
   basic_html_url?: string;
 }
 
-const now = new Date();
-const test = now.toJSON().slice(0, 10);
-console.log('test:', test)
-console.log('now:', now);
+const options: Intl.DateTimeFormatOptions = {
+  year: "2-digit",
+  month: "2-digit",
+  day: "2-digit"
+};
 
-const [year, month, day] = test.split('-');
-const TODAY = `${year.slice(2)}${month}${+day-1}`;
+const now = new Date();
+const dateString = now.toLocaleDateString("en-US", options);
+console.log('date string:', dateString);
+
+
+const [month, day, year] = dateString.split('/');
+const TODAY = `${year}${month}${day}`;
 console.log('today:', TODAY);
-// const TODAY = '2026-10-30'
 
 
 const KEY = import.meta.env.VITE_API_KEY;
