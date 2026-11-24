@@ -6,15 +6,9 @@ const DOMAIN = "https://science.nasa.gov/wp-json/wp/v2/apod-basic/";
 
 export default async (req: Request, context: Context) => {
 
-  console.log('anything?');
-
-  const url = new URL(req.url);
-  console.log('url:', url);
-  let day = url.searchParams.get('date') || '260803';
-  // const day = req.url.split('?');
-  console.log('day:', day);
-  console.log('???', req.url);
-  console.log()
+  // Pull out date because APOD request doesn't use query string
+  const dateParam = req.url.split('=')[1];
+  console.log('dateParam:', dateParam);
 
   if (!KEY) {
     return Response.json(
@@ -24,9 +18,9 @@ export default async (req: Request, context: Context) => {
   }
 
   try {
+    console.log('domain:', DOMAIN)
     const res = await fetch(
-      `${DOMAIN}${encodeURIComponent(day)}`,
-      
+      `${DOMAIN}${dateParam}`,
       {
         method: "GET",
         headers: { 

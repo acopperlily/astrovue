@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { getToday, formatDate } from '../utils/getDates';
+import fetchInfo from '../utils/fetchInfo';
 
 import fallbackIMG from '../assets/fallback.jpg';
 
@@ -22,81 +23,27 @@ const now = getToday();
 const TODAY = formatDate(now);
 console.log('today:', TODAY);
 
-
-const KEY = import.meta.env.VITE_API_KEY;
-const DOMAIN = `https://science.nasa.gov/wp-json/wp/v2/apod-basic/${TODAY}?api_key=`;
-
 const Home = () => {
   const [data, setData] = useState<ImageProps>({ 
     title: "In the Center of Spiral Galaxy M61", 
     hdurl: fallbackIMG,
     url: fallbackIMG,
-    explanation: "Is there a spiral galaxy in the center of this spiral galaxy? Sort of. Image data from the Hubble Space Telescope, the European Southern Observatory, and smaller telescopes on planet Earth are combined in this detailed portrait of face-on spiral galaxy Messier 61 (M61) and its bright center. A mere 55 million light-years away in the Virgo Cluster of Galaxies, M61 is also known as NGC 4303. It's considered to be an example of a barred spiral galaxy similar to our own Milky Way. Like other spiral galaxies, M61 also features sweeping spiral arms, cosmic dust lanes, pinkish star forming regions, and young blue star clusters. Its core houses an active supermassive black hole surrounded by a bright nuclear spiral -- infalling star-forming gas that itself looks like a separate spiral galaxy.",
+    explanation: '',
     media_type: 'image',
     copyright: ''
   });
 
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
     const fetchToday = async () => {
-      const url = `${DOMAIN}${KEY}`;
       try {
-        const res = await fetch(url, { signal });
-        if (!res.ok) {
-          console.error('oof');
-        }
-        const headers = res.headers.get('Content-Type');
-        console.log('headers:', headers);
-        const data = await res.json();
-        console.log(data);
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data.explanation, 'text/html');
-        console.log(doc.body.textContent);
-        console.log('doc:', doc);
-        setData(() => ({
-          ...data,
-          explanation: doc.body.textContent
-        }));
-      } catch (err) {
-        console.error('Error', err);
-      }
-    }
-
-    fetchToday();
-    return () => {
-      controller.abort;
-    }
-  }, []);
-
-  useEffect(() => {
-    async function getInfo() {
-      // const testDate = '240417'
-      const apiURL = `/.netlify/functions/getInfo?date=${TODAY}`;
-      try {
-        const res = await fetch(apiURL);
-        console.log('res:', res);
-        if (!res.ok) {
-          console.error('Network response was ass.');
-        }
-        const info = await res.json();
-
-        console.log('func:', info);
-
-        // const newTitle = info.title;
-      
-        // let imageURL = data;
-        // setData((data) => ({
-        //   ...data,
-        //   title: newTitle
-        // }));
+        const newData = await fetchInfo(TODAY);
+        setData(newData);
       } catch (error) {
         console.error(error);
       }
-      // return
     }
-    getInfo();
+    
+    fetchToday();
   }, []);
 
   return (

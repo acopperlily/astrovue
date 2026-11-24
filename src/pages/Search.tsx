@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { getToday, formatDate } from '../utils/getDates';
+import fetchInfo from '../utils/fetchInfo';
 
 interface ImageProps {
   title: string;
@@ -19,8 +20,27 @@ const Search = () => {
   const [searchDate, setSearchDate] = useState<string>(today);
   const [data, setData] = useState<ImageProps>();
 
+  const fetchDate = async () => {
+    try {
+      const newData = await fetchInfo(searchDate);
+      setData(newData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function getInfo(pastDate: string) {
   const apiURL = `/.netlify/functions/getInfo?date=${pastDate}`;
+
+  // const fetchDate = async () => {
+  //   try {
+  //     const newData = await fetchInfo(searchDate);
+  //     setData(newData);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
   try {
     const res = await fetch(apiURL);
     if (!res.ok) {
@@ -43,7 +63,10 @@ const Search = () => {
 
   const handleClick = (e: any) => {
     e.preventDefault();
-    getInfo(formatDate(searchDate));
+    const formattedDate = formatDate(searchDate);
+    // getInfo(formatDate(searchDate));
+    getInfo(formattedDate)
+    // fetchDate();
   }
 
   return (
