@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import { useOutletContext } from "react-router";
+import { getToday, formatDate } from '../utils/getDates';
 
 interface ImageProps {
   title: string;
@@ -12,33 +12,17 @@ interface ImageProps {
   basic_html_url?: string;
 }
 
-const options: Intl.DateTimeFormatOptions = {
-  year: "2-digit",
-  month: "2-digit",
-  day: "2-digit"
-};
-
-const now = new Date();
-const dateString = now.toLocaleDateString("en-US", options);
-console.log('date string:', dateString);
-
-
-const [month, day, year] = dateString.split('/');
-const TODAY = `${year}${month}${day}`;
+const today = getToday()
+const earliestDate = '1995-06-16';
 
 const Search = () => {
-  // const { data, handleFetch, savFavs } = useOutletContext();
-  // const [title, setTitle] = useState('');
+  const [searchDate, setSearchDate] = useState<string>(today);
   const [data, setData] = useState<ImageProps>();
-  // const DAY = '260307'
-  let pastDate: string = TODAY;
 
   async function getInfo(pastDate: string) {
-  // const testDate = '240417'
   const apiURL = `/.netlify/functions/getInfo?date=${pastDate}`;
   try {
     const res = await fetch(apiURL);
-    console.log('search:', res);
     if (!res.ok) {
       console.error('Network response was ass.');
     }
@@ -52,28 +36,43 @@ const Search = () => {
   // return
   }
 
+  const handleChange = (e: any) => {
+    const newDate = e.target.value;
+    setSearchDate(newDate);
+  }
+
   const handleClick = (e: any) => {
     e.preventDefault();
-    pastDate = e.target.value;
-    console.log('day:', pastDate);
-    pastDate = pastDate.slice(2).split('-').join('');
-    console.log(pastDate);
-    getInfo(pastDate);
+    getInfo(formatDate(searchDate));
   }
 
   return (
     <div className="container">
       <h1>Search page</h1>
-      <input 
-        type="date" 
-        id="butt"
-        min="2000-01-01"
-        max={`${month}-${day}-${year}`}
-        onChange={handleClick} 
-      />
+      <form 
+        action=""
+        onSubmit={(e) => handleClick(e)}
+      >
+        <label htmlFor="search">Choose a date:</label>
+        <input
+          type="date"
+          name="search"
+          id="search"
+          min={earliestDate}
+          max={today}
+          value={searchDate}
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        <button 
+          type='submit'
+        >
+          Submit
+        </button>
+      </form>
 
       {data && <h2>{data.title}</h2>}
-      {data && <img src={data.hdurl} />}
+      {data && <img src={data.hdurl}/>}
       {data && <p>{data.explanation}</p>}
     </div>
   )

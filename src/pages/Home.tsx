@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { getToday, formatDate } from '../utils/getDates';
 
 import fallbackIMG from '../assets/fallback.jpg';
 
@@ -17,19 +18,8 @@ interface ImageProps {
   basic_html_url?: string;
 }
 
-const options: Intl.DateTimeFormatOptions = {
-  year: "2-digit",
-  month: "2-digit",
-  day: "2-digit"
-};
-
-const now = new Date();
-const dateString = now.toLocaleDateString("en-US", options);
-console.log('date string:', dateString);
-
-
-const [month, day, year] = dateString.split('/');
-const TODAY = `${year}${month}${day}`;
+const now = getToday();
+const TODAY = formatDate(now);
 console.log('today:', TODAY);
 
 
