@@ -40,10 +40,7 @@ const Home = () => {
         const newData = await fetchInfo(TODAY);
         const plaintext = convert(newData.explanation);
         console.log('html:', plaintext);
-        setData((newData) => ({
-          ...newData,
-          explanation: plaintext
-        }));
+        setData({ ...newData, explanation: plaintext });
       } catch (error) {
         console.error(error);
       }
