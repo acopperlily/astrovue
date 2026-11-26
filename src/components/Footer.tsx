@@ -4,11 +4,13 @@ import Linkedin from "./Linkedin";
 import Github from "./Github";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="container">
       <footer>
         <p>
-          <span>&copy;2025</span>
+          <span>&copy;{currentYear}</span>
           <a target="_blank" rel="noopener noreferrer" href="https://aprilcopley.netlify.app">April Copley</a>
         </p>
         <div className="social__links">

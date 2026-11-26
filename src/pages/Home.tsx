@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { getToday, formatDate } from '../utils/getDates';
+import { convert } from 'html-to-text';
 import fetchInfo from '../utils/fetchInfo';
 
 import fallbackIMG from '../assets/fallback.jpg';
@@ -37,7 +38,12 @@ const Home = () => {
     const fetchToday = async () => {
       try {
         const newData = await fetchInfo(TODAY);
-        setData(newData);
+        const plaintext = convert(newData.explanation);
+        console.log('html:', plaintext);
+        setData((newData) => ({
+          ...newData,
+          explanation: plaintext
+        }));
       } catch (error) {
         console.error(error);
       }
