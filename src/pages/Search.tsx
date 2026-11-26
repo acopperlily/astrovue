@@ -13,47 +13,23 @@ interface ImageProps {
   basic_html_url?: string;
 }
 
-const today = getToday()
-const earliestDate = '1995-06-16';
+const DATE_MAX = getToday();
+const DATE_MIN = '1995-06-16';
 
 const Search = () => {
-  const [searchDate, setSearchDate] = useState<string>(today);
+  const [searchDate, setSearchDate] = useState<string>(DATE_MAX);
   const [data, setData] = useState<ImageProps>();
 
-  const fetchDate = async () => {
+  const getInfo = async (pastDate: string) => {
     try {
-      const newData = await fetchInfo(searchDate);
+      const newData = await fetchInfo(pastDate);
+
+      console.log('func:', newData);
       setData(newData);
+
     } catch (error) {
       console.error(error);
     }
-  }
-
-  async function getInfo(pastDate: string) {
-  const apiURL = `/.netlify/functions/getInfo?date=${pastDate}`;
-
-  // const fetchDate = async () => {
-  //   try {
-  //     const newData = await fetchInfo(searchDate);
-  //     setData(newData);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
-  try {
-    const res = await fetch(apiURL);
-    if (!res.ok) {
-      console.error('Network response was ass.');
-    }
-    const info = await res.json();
-    console.log('func:', info);
-    setData(info);
-
-  } catch (error) {
-    console.error(error);
-  }
-  // return
   }
 
   const handleChange = (e: any) => {
@@ -64,9 +40,8 @@ const Search = () => {
   const handleClick = (e: any) => {
     e.preventDefault();
     const formattedDate = formatDate(searchDate);
-    // getInfo(formatDate(searchDate));
+    console.log('formattedDate:', formattedDate);
     getInfo(formattedDate)
-    // fetchDate();
   }
 
   return (
@@ -81,8 +56,8 @@ const Search = () => {
           type="date"
           name="search"
           id="search"
-          min={earliestDate}
-          max={today}
+          min={DATE_MIN}
+          max={DATE_MAX}
           value={searchDate}
           onChange={(e) => handleChange(e)}
           required

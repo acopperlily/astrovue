@@ -25,7 +25,7 @@ console.log('today:', TODAY);
 
 const Home = () => {
   const [data, setData] = useState<ImageProps>({ 
-    title: "In the Center of Spiral Galaxy M61", 
+    title: "Loading...", 
     hdurl: fallbackIMG,
     url: fallbackIMG,
     explanation: '',
@@ -42,7 +42,7 @@ const Home = () => {
         console.error(error);
       }
     }
-    
+
     fetchToday();
   }, []);
 
